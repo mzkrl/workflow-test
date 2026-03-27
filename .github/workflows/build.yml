@@ -27,11 +27,11 @@ jobs:
           bun build ./index.ts --compile --target bun-windows-x64 --outfile pythagoras-win.exe
 
       # --- CARA MANUAL YANG LEBIH STABIL ---
-      - name: Install and Run UPX
-        run: |
-          sudo apt-get update && sudo apt-get install -y upx
-          upx --best --lzma pythagoras-linux
-          upx --best --lzma pythagoras-win.exe
+      # - name: Install and Run UPX
+      #   run: |
+      #     sudo apt-get update && sudo apt-get install -y upx
+      #     upx --best --lzma pythagoras-linux
+      #     upx --best --lzma pythagoras-win.exe
       # -------------------------------------
           
       - name: Upload Artifacts
