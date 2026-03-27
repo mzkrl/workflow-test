@@ -1,5 +1,8 @@
 # dependencies (bun install)
 node_modules
+pythagoras-linux
+pythagoras-win.exe
+.env
 pythagoras
 # output
 out
