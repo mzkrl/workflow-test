@@ -25,6 +25,16 @@ jobs:
         run: |
           bun build ./index.ts --compile --target bun-linux-x64 --outfile pythagoras-linux
           bun build ./index.ts --compile --target bun-windows-x64 --outfile pythagoras-win.exe
+
+      # --- STEP BARU: KOMPRESI ---
+      - name: Compress Binaries with UPX
+        uses: upx-gh-actions/upx-action@v1
+        with:
+          files: |
+            pythagoras-linux
+            pythagoras-win.exe
+          args: -9 # Level kompresi maksimal (1-9)
+      # ---------------------------
           
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
