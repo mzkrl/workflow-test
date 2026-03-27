@@ -1,7 +1,7 @@
 name: Build Bun App
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     tags:
       - 'v*' # Trigger jalan kalau lo push tag seperti v1.0, v2.1, dll.
 
@@ -45,14 +45,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 2. Ini bakal jalan SETIAP KALI kamu push ke branch main (tanpa tag)
-      - name: Update Latest Release
-        if: github.ref == 'refs/heads/main'
+      # 2. Ini bakal jalan SETIAP KALI kamu push ke branch master (tanpa tag)
+      - name: Update Latest Release 
+        if: github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: "Latest Continuous Build"
-          body: "Build otomatis dari commit terakhir di branch main."
+          body: "Build otomatis dari commit terakhir di branch master."
           prerelease: true # Biar ada label 'Pre-release' di GitHub
           files: |
             pythagoras-linux
