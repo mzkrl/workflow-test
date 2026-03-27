@@ -1,0 +1,14 @@
+image: oven/bun:latest # Menggunakan image resmi Bun
+
+stages:
+  - build
+
+build_job:
+  stage: build
+  script:
+    - bun install
+    - bun build ./index.ts --compile --outfile pythagoras-linux
+  artifacts:
+    paths:
+      - pythagoras-linux
+    expire_in: 1 week

@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/prompt-sync": "^4.2.3",
+    "@types/bun": "latest"
+  },
+  "type": "module",
+  "name": "workflow-test",
+  "module": "index.ts",
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
