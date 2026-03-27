@@ -1,14 +1,34 @@
-image: oven/bun:latest # Menggunakan image resmi Bun
-
 stages:
   - build
+  - release
 
 build_job:
   stage: build
+  image: oven/bun:latest
   script:
     - bun install
-    - bun build ./index.ts --compile --outfile pythagoras-linux
+    - bun build ./index.ts --compile --target bun-linux-x64 --outfile pythagoras-linux
+    - bun build ./index.ts --compile --target bun-windows-x64 --outfile pythagoras-win.exe
   artifacts:
     paths:
       - pythagoras-linux
-    expire_in: 1 week
+      - pythagoras-win.exe
+
+# Job khusus buat bikin halaman Release
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG                 # Hanya jalan kalau ada git tag
+  script:
+    - echo "Mempersiapkan release untuk $CI_COMMIT_TAG"
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'Otomatis dibuat oleh GitLab CI/CD'
+    tag_name: '$CI_COMMIT_TAG'
+    assets:
+      links:
+        - name: 'Pythagoras Linux'
+          url: '${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/file/pythagoras-linux'
+        - name: 'Pythagoras Windows'
+          url: '${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/file/pythagoras-win.exe'

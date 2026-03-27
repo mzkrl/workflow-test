@@ -1,13 +1,17 @@
 name: Build Bun App
-on: [push]
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*' # Trigger jalan kalau lo push tag seperti v1.0, v2.1, dll.
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # image linux
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
        
-      - name: Setup Bun # pake bun buat compile js/ts ke executable
+      - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -15,11 +19,25 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Build Executable #build
-        run: bun build ./index.ts --compile --outfile pythagoras-linux
-
-      - name: Upload Artifact
+      - name: Build Executable
+        run: |
+          bun build ./index.ts --compile --target bun-linux-x64 --outfile pythagoras-linux
+          bun build ./index.ts --compile --target bun-windows-x64 --outfile pythagoras-win.exe
+          
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: my-executable
-          path: pythagoras-linux
+          name: pythagoras-apps
+          path: |
+            pythagoras-linux
+            pythagoras-win.exe
+            
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            pythagoras-linux
+            pythagoras-win.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
