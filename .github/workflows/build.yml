@@ -54,14 +54,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 2. Ini bakal jalan SETIAP KALI kamu push ke branch master (tanpa tag)
-      - name: Update Latest Release 
-        if: github.ref == 'refs/heads/master'
+      - name: Update Latest Release
+        if: github.ref == 'refs/heads/master' # Sesuaikan kalau branch-mu masih 'master'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: "Latest Continuous Build"
-          body: "Build otomatis dari commit terakhir di branch master."
-          prerelease: true # Biar ada label 'Pre-release' di GitHub
+          body: "Build otomatis dari commit terakhir. Update: ${{ github.sha }}"
+          prerelease: true
+          make_latest: true # Paksa jadi yang paling atas
           files: |
             pythagoras-linux
             pythagoras-win.exe
